@@ -30,7 +30,6 @@ public class AccountShouldTest {
 	@Before
 	public void setUp() {
 		account = Mockito.mock(Account.class);
-		account.createAccount();
 	}
 
 	@Test

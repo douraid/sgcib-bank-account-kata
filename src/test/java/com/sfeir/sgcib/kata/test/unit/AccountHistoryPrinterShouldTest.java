@@ -21,7 +21,6 @@ public class AccountHistoryPrinterShouldTest {
 	
 	@Before
 	public void setUp() {
-		account.createAccount();
 		accountHistoryPrinter = new AccountHistoryConsolePrinter();
 		account.executeDepositOperation(500d);
 	}
