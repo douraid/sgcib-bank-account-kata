@@ -1,12 +1,10 @@
 package com.sfeir.sgcib.kata.test.acceptance;
 
 import org.assertj.core.api.Assertions;
-import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sfeir.sgcib.kata.domain.Account;
-import com.sfeir.sgcib.kata.domain.AccountHistoryPrinter;
 
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
@@ -18,23 +16,22 @@ import cucumber.api.java.en.When;
  * @author Douraid
  *
  */
-
 public class AccountOperationsStepDefinitions {
 	
-	private Account account;
+	private Account account = new Account();
 	
 	private String accountStatement;
 	
-	private AccountHistoryPrinter accountStatementPrinter;
 	
 	private final Logger LOG = LoggerFactory.getLogger(AccountOperationsStepDefinitions.class);
 
 
 	@Before
 	public void setUp() {
-		account = Mockito.mock(Account.class);
+		
 		
 	}
+	
 
 	@Given("I deposit {int} euros")
 	public void iDeposit(Integer amount) {

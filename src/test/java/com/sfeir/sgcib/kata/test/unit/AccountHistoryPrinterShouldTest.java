@@ -6,12 +6,15 @@ import java.io.PrintStream;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.sfeir.sgcib.kata.domain.Account;
 import com.sfeir.sgcib.kata.domain.AccountHistoryConsolePrinter;
 import com.sfeir.sgcib.kata.domain.AccountHistoryPrinter;
 
+@RunWith(MockitoJUnitRunner.class)
 public class AccountHistoryPrinterShouldTest {
 	
 	private AccountHistoryPrinter accountHistoryPrinter;
@@ -23,6 +26,7 @@ public class AccountHistoryPrinterShouldTest {
 	public void setUp() {
 		accountHistoryPrinter = new AccountHistoryConsolePrinter();
 		account.executeDepositOperation(500d);
+		
 	}
 	
 	@Test

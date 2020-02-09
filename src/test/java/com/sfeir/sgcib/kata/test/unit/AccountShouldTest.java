@@ -3,13 +3,11 @@ package com.sfeir.sgcib.kata.test.unit;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sfeir.sgcib.kata.domain.Account;
+import com.sfeir.sgcib.kata.exception.DebitNotAllowedException;
 
 
 
@@ -19,7 +17,6 @@ import com.sfeir.sgcib.kata.domain.Account;
  * @author Douraid
  *
  */
-@RunWith(MockitoJUnitRunner.class)
 public class AccountShouldTest {
 	
 	private Account account;
@@ -29,7 +26,7 @@ public class AccountShouldTest {
 
 	@Before
 	public void setUp() {
-		account = Mockito.mock(Account.class);
+		account = new Account();
 	}
 
 	@Test
@@ -40,7 +37,7 @@ public class AccountShouldTest {
 	}
 
 	@Test
-	public void execute_withdrawal_operation() {
+	public void execute_withdrawal_operation() throws DebitNotAllowedException {
 		account.executeDepositOperation(500d);
 		account.executeWithdrawalOperation(150d);
 		Assertions.assertThat(account.getBalance()).isEqualTo(350d);
