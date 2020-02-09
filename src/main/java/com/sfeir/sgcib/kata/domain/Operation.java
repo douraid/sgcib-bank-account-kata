@@ -2,6 +2,8 @@ package com.sfeir.sgcib.kata.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.naming.OperationNotSupportedException;
 
@@ -24,6 +26,9 @@ public class Operation implements Serializable{
 	/**
 	 * 
 	 */
+	
+	private static AtomicLong OP_REFERENCE_GENERATOR = new AtomicLong(1000);
+	
 	private static final long serialVersionUID = 1L;
 	
 
@@ -38,9 +43,9 @@ public class Operation implements Serializable{
 	private Account account;
 	
 
-	public Operation(Long reference, Date dateTime, Double amount, OperationType type, Account account) {
+	public Operation(Date dateTime, Double amount, OperationType type, Account account) {
 		super();
-		this.reference = reference;
+		this.reference = OP_REFERENCE_GENERATOR.addAndGet(1);
 		this.dateTime = dateTime;
 		this.amount = amount;
 		this.type = type;
@@ -103,10 +108,9 @@ public class Operation implements Serializable{
 	
 	/**
 	 * Will execute the operation (save it into the database)
-	 * @throws OperationNotSupportedException 
 	 */
 	public void execute() {
-		throw new RuntimeException("Not implemented");
+		
 	}
 
 
@@ -125,11 +129,6 @@ public class Operation implements Serializable{
 		private Date dateTime;
 		
 		private OperationType type;
-		
-		public OperationBuilder withReference(Long reference) {
-			this.reference = reference;
-			return this;
-		}
 		
 		public OperationBuilder withAccount(Account account) {
 			this.account = account;
@@ -152,7 +151,7 @@ public class Operation implements Serializable{
 		}
 		
 		public Operation build() {
-			return new Operation(reference, dateTime, amount, type, account);
+			return new Operation(dateTime, amount, type, account);
 		}
 		
 	}

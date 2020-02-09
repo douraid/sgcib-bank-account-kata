@@ -1,10 +1,16 @@
 package com.sfeir.sgcib.kata.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.naming.OperationNotSupportedException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.sfeir.sgcib.kata.exception.DebitNotAllowedException;
 
 /**
  * 
@@ -22,9 +28,11 @@ public class Account implements Serializable {
 
 	private Client client;
 
-	private List<Operation> operations;
-
-	private Double balance;
+	private List<Operation> operations = new ArrayList<>();
+	
+	private AccountHistoryPrinter statementPrinter = new AccountHistoryConsolePrinter();
+	
+	private final Logger LOG = LoggerFactory.getLogger(Account.class);
 
 	/**
 	 * @return
@@ -32,7 +40,6 @@ public class Account implements Serializable {
 	public Long getAccountNumber() {
 		return accountNumber;
 	}
-
 
 	public Client getClient() {
 		return client;
@@ -42,19 +49,26 @@ public class Account implements Serializable {
 	 * @return
 	 */
 	public Double getBalance() {
+		Double balance = operations.stream().mapToDouble(operation -> {
+			return operation.getAmount() * (operation.isCreditOperation() ? 1 : -1);
+		}).sum();
+		
+		LOG.info("Requested balance is: {}",balance);
 		return balance;
 	}
 
 	/**
 	 * @param operation
 	 * @return
-	 * @throws OperationNotSupportedException 
 	 */
 	public Double getBalanceAtOperation(Operation operation) {
-		throw new RuntimeException("Not implemented");
+		return operations.stream().filter(op -> {
+			return op.getReference() <= operation.getReference();
+		}).mapToDouble(op -> {
+			return op.getAmount() * (op.isCreditOperation() ? 1 : -1);
+		}).sum();
 	}
 
-	
 	/**
 	 * @return the account's deposit and withdrawal operations
 	 */
@@ -64,32 +78,42 @@ public class Account implements Serializable {
 
 
 	/**
-	 * @return the created account object
-	 * @throws OperationNotSupportedException 
-	 */
-	public Account createAccount() {
-		throw new RuntimeException("Not implemented");
-	}
-
-	/**
 	 * @param amount
 	 * @return the persisted deposit operation object
-	 * @throws OperationNotSupportedException 
 	 */
 	public Operation executeDepositOperation(Double amount) {
-		throw new RuntimeException("Not implemented");
+		Operation operation = new Operation.OperationBuilder().withAmount(amount).withAmount(amount)
+				.withDateTime(new Date(System.currentTimeMillis())).withType(OperationType.DEPOSIT).withAccount(this).build();
+		operation.execute();
+
+		getOperations().add(operation);
+
+		return operation;
 	}
 
 	/**
 	 * @param amount
-	 * @return the persisted withdrawal operation object
-	 * This method will create and execute (save) a withdrawal operation
-	 * @throws OperationNotSupportedException 
+	 * @return the persisted withdrawal operation object This method will create and
+	 *         execute (save) a withdrawal operation
+	 * @throws DebitNotAllowedException 
 	 */
-	public Operation executeWithdrawalOperation(Double amount) {
-		throw new RuntimeException("Not implemented");
-	}
+	public Operation executeWithdrawalOperation(Double amount) throws DebitNotAllowedException {
+		if(getBalance()<amount) {
+			throw new DebitNotAllowedException();
+		}
+		
+		Operation operation = new Operation.OperationBuilder().withAmount(amount).withAmount(amount)
+				.withDateTime(new Date(System.currentTimeMillis())).withType(OperationType.WITHDRAWAL).withAccount(this).build();
+		operation.execute();
 
+		getOperations().add(operation);
+
+		return operation;
+	}
+	
+	public String printAccountStatement() {
+		return statementPrinter.printAccountHistory(this);
+	}
 
 	@Override
 	public int hashCode() {
@@ -115,7 +139,5 @@ public class Account implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
 
 }
