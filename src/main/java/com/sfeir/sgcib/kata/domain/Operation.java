@@ -105,8 +105,8 @@ public class Operation implements Serializable{
 	 * Will execute the operation (save it into the database)
 	 * @throws OperationNotSupportedException 
 	 */
-	public void execute() throws OperationNotSupportedException {
-		throw new OperationNotSupportedException("Not implemented");
+	public void execute() {
+		throw new RuntimeException("Not implemented");
 	}
 
 

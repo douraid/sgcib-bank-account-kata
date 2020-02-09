@@ -50,8 +50,8 @@ public class Account implements Serializable {
 	 * @return
 	 * @throws OperationNotSupportedException 
 	 */
-	public Double getBalanceAtOperation(Operation operation) throws OperationNotSupportedException {
-		throw new OperationNotSupportedException("Not implemented");
+	public Double getBalanceAtOperation(Operation operation) {
+		throw new RuntimeException("Not implemented");
 	}
 
 	
@@ -67,8 +67,8 @@ public class Account implements Serializable {
 	 * @return the created account object
 	 * @throws OperationNotSupportedException 
 	 */
-	public Account createAccount() throws OperationNotSupportedException {
-		throw new OperationNotSupportedException("Not implemented");
+	public Account createAccount() {
+		throw new RuntimeException("Not implemented");
 	}
 
 	/**
@@ -76,8 +76,8 @@ public class Account implements Serializable {
 	 * @return the persisted deposit operation object
 	 * @throws OperationNotSupportedException 
 	 */
-	public Operation executeDepositOperation(Double amount) throws OperationNotSupportedException {
-		throw new OperationNotSupportedException("Not implemented");
+	public Operation executeDepositOperation(Double amount) {
+		throw new RuntimeException("Not implemented");
 	}
 
 	/**
@@ -86,8 +86,8 @@ public class Account implements Serializable {
 	 * This method will create and execute (save) a withdrawal operation
 	 * @throws OperationNotSupportedException 
 	 */
-	public Operation executeWithdrawalOperation(Double amount) throws OperationNotSupportedException {
-		throw new OperationNotSupportedException("Not implemented");
+	public Operation executeWithdrawalOperation(Double amount) {
+		throw new RuntimeException("Not implemented");
 	}
 
 
