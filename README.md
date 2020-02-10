@@ -1,4 +1,4 @@
-#SGCIB Bank account kata
+# SGCIB Bank account kata
 
 
 This application is an implementation to the following specification
